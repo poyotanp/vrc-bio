@@ -1,0 +1,47 @@
+name: Update Bio
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+
+    - name: Install dependencies
+      run: bun install
+
+    - name: Load VRChat Cookies
+      env:
+        VRCHAT_COOKIES: ${{ secrets.VRCHAT_COOKIES }}
+      run: |
+        echo "$VRCHAT_COOKIES" > cookies.json
+
+    - name: Run index.ts
+      env:
+        VRCHAT_USERNAME: ${{ secrets.VRCHAT_USERNAME }}
+        VRCHAT_PASSWORD: ${{ secrets.VRCHAT_PASSWORD }}
+        VRCHAT_2FA_SECRET: ${{ secrets.VRCHAT_2FA_SECRET }}
+        STEAM_ID64: ${{ secrets.STEAM_ID64 }}
+        STEAM_APIKEY: ${{ secrets.STEAM_APIKEY }}
+      run: bun run index.ts
+
+    - name: Save VRChat Cookies
+      env:
+        GH_PAT: ${{ secrets.GH_PAT }}
+      run: |
+        if [ -f cookies.json ]; then
+          COOKIES_CONTENT=$(cat cookies.json)
+          gh secret set VRCHAT_COOKIES --body "$COOKIES_CONTENT" -R $GITHUB_REPOSITORY
+        else
+          echo "cookies.json not found, skipping cookie save."
+        fi
