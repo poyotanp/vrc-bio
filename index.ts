@@ -7,8 +7,8 @@ const api = new VRChatAPI({
   userAgent: "vrc-profile+poyotanp@poyo.moe",
   username: env.VRCHAT_USERNAME,
   password: env.VRCHAT_PASSWORD,
-  useCookies: true,
-  cookiePath: "./cookies.json",
+  useCookies: false,
+  //cookiePath: "./cookies.json",
   TwoFactorAuthSecret: env.VRCHAT_2FA_SECRET,
 });
 
