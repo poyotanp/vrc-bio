@@ -24,7 +24,12 @@ jobs:
       env:
         VRCHAT_COOKIES: ${{ secrets.VRCHAT_COOKIES }}
       run: |
-        echo "$VRCHAT_COOKIES" > cookies.json
+        if [ -n "$VRCHAT_COOKIES" ]; then
+          echo "$VRCHAT_COOKIES" > cookies.json
+          echo "VRChat cookies loaded from secret."
+        else
+          echo "VRCHAT_COOKIES secret is empty, skipping cookies.json creation."
+        fi
 
     - name: Run index.ts
       env:
