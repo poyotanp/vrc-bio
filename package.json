@@ -1,0 +1,14 @@
+{
+  "name": "vrc-profile",
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "arkenv": "^0.7.2",
+    "vrc-ts": "^1.0.17"
+  }
+}
