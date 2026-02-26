@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-run:
+  run:
     runs-on: ubuntu-latest
 
     steps:
@@ -42,7 +42,7 @@ jobs:
 
     - name: Save VRChat Cookies
       env:
-        GH_PAT: ${{ secrets.GH_PAT }}
+        GH_TOKEN: ${{ secrets.GH_PAT }}
       run: |
         if [ -f cookies.json ]; then
           COOKIES_CONTENT=$(cat cookies.json)
