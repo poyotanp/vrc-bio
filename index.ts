@@ -62,3 +62,34 @@ try {
   console.error("An error occurred while updating the bio.");
   throw e;
 }
+
+try {
+  process.stdout.write("Updating Discord Profile...");
+  await fetch(
+    `https://discord.com/api/v9/applications/${env.DISCORD_APPLICATION_ID}/users/${env.DISCORD_USER_ID}/identities/0/profile`,
+    {
+      headers: {
+        "User-Agent": "vrc-profile+poyotanp@poyo.moe",
+        "Content-Type": "application/json",
+        Authorization: `Bot ${env.DISCORD_BOT_TOKEN}`,
+      },
+      method: "PATCH",
+      body: JSON.stringify({
+        username: "poyotanp",
+        data: {
+          dynamic: [
+            {
+              type: 1,
+              name: "vrchat",
+              value: `ぽよたんぴ\u2000 \u2000 \u2000 \u2000 \u2000 \u2000 \u2000 \u2000${playedHours}時間プレイ`,
+            },
+          ],
+        },
+      }),
+    },
+  );
+  console.log("Updated!");
+} catch (e) {
+  console.error("An error occurred while updating the discord profile.");
+  throw e;
+}

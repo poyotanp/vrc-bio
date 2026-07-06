@@ -40,6 +40,9 @@ jobs:
           VRCHAT_2FA_SECRET: ${{ secrets.VRCHAT_2FA_SECRET }}
           STEAM_ID64: ${{ secrets.STEAM_ID64 }}
           STEAM_APIKEY: ${{ secrets.STEAM_APIKEY }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_APPLICATION_ID: ${{ secrets.DISCORD_APPLICATION_ID }}
+          DISCORD_USER_ID: ${{ secrets.DISCORD_USER_ID }}
         run: bun run index.ts
 
       #- name: Save VRChat Cookies
