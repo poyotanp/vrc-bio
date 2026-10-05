@@ -2,13 +2,15 @@
   "name": "vrc-profile",
   "module": "index.ts",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "^1.4.2"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "arkenv": "^0.7.2",
-    "vrc-ts": "^1.0.17"
+    "arkenv": "^0.7.8",
+    "keyv-file": "^5.3.5",
+    "prompts": "^2.4.2",
+    "vrchat": "^2.24.0"
   }
 }

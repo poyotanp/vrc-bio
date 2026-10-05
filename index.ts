@@ -1,18 +1,25 @@
 import { env } from "./env";
-import { VRChatAPI } from "vrc-ts";
+import KeyvFile from "keyv-file"
+import { VRChat, type CurrentUser } from "vrchat"
 
-const TEMPLATE = await Bun.file("TEMPLATE.txt").text();
-
-const api = new VRChatAPI({
-  userAgent: "vrc-profile+poyotanp@poyo.moe",
-  username: env.VRCHAT_USERNAME,
-  password: env.VRCHAT_PASSWORD,
-  useCookies: false,
-  //cookiePath: "./cookies.json",
-  TwoFactorAuthSecret: env.VRCHAT_2FA_SECRET,
+const vrchat = new VRChat({
+  application: {
+    name: "vrc-profile+poyotanp@poyo.moe",
+    version: "1.0.0",
+    contact: "poyotanp@poyo.moe",
+  },
+  authentication: {
+    optimistic: true,
+    credentials: {
+      username: env.VRCHAT_USERNAME,
+      password: env.VRCHAT_PASSWORD,
+      totpSecret: env.VRCHAT_2FA_SECRET,
+    },
+  },
+  keyv: new KeyvFile({ filename: "./cookies.json" }),
 });
 
-await api.login();
+const TEMPLATE = await Bun.file("TEMPLATE.txt").text();
 
 process.stdout.write("Retrieving the list of Steam games.....");
 const ownedGames = await (
@@ -49,14 +56,18 @@ const bio = TEMPLATE.replaceAll("%play_time%", playedHours)
 
 try {
   process.stdout.write("Updating Bio....");
-  const updatedUser = await api.userApi.updateUserInfo({
-    userId: api.currentUser?.id!,
-    bio,
-  });
+
+  const currentUser = (await vrchat.getCurrentUser({ throwOnError: true })).data;
+  if ("requiresTwoFactorAuth" in currentUser) throw new Error("2fa failed");
+
+  const updatedProfile = (await vrchat.updateProfile({
+    path: { userId: currentUser.id },
+    body: { bio }
+  })).data;
 
   console.log("Updated!");
   console.log("-------------------");
-  console.log(updatedUser.bio.replaceAll("\u00AD", "␣"));
+  console.log(updatedProfile?.bio!.replaceAll("\u00AD", "␣"));
   console.log("-------------------");
 } catch (e) {
   console.error("An error occurred while updating the bio.");
@@ -93,3 +104,5 @@ try {
   console.error("An error occurred while updating the discord profile.");
   throw e;
 }
+
+process.exit();
