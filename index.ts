@@ -1,3 +1,4 @@
+return;
 import { env } from "./env";
 import KeyvFile from "keyv-file"
 import { VRChat, type CurrentUser } from "vrchat"
